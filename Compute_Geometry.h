@@ -1,19 +1,5 @@
-// Copyright (C) Common Computational Geometry Algorithms e.U, ZutterHao
-//
-// This file is implementation of Common Common Computational Geometry Algorithms.
-//
-// Please please pay attention to input according to the specified data type.
-//
-// Author: ZutterHao .Nanjing University ,VISG
-// Github: https://github.com/fanghao6666
+// è®¡ç®—å‡ ä½•å¸¸è§ç®—æ³•ï¼ŒåŒ…æ‹¬ç‚¹ï¼Œçº¿ï¼Œå¤šè¾¹å½¢ç­‰
 
-// ¸öÈËÊµÏÖµÄÒ»Ğ©¼ÆËã¼¸ºÎÖĞ³£¼ûµÄËã·¨£¬°üÀ¨µã£¬Ïß£¬¶à±ßĞÎµÈ
-// ËùÓĞËã·¨Ö»ÒÀÀµÓÚC++±ê×¼¿â£¬²»ÓÃ°üº¬ÈÎºÎÆäËûµÚÈı·½¿â
-// Ê¹ÓÃÊ±Çë×¢Òâ°´ÕÕ¹æ¶¨µÄÊı¾İÀàĞÍ½øĞĞÊäÈë
-// Ä¿Ç°Ö»Ê¹ÓÃC++À´ÊµÏÖËã·¨£¬¾ßÌåËã·¨Ô­Àí»áÂ½ĞøÔÚGithubÉÏ¸üĞÂ
-// Github: https://github.com/fanghao6666
-
-/*** °üº¬µÄÍ·ÎÄ¼ş ***/
 #include <iostream>
 #include <vector>
 #include <map>
@@ -21,544 +7,269 @@
 #include <algorithm>
 #include <random>
 #include <ctime>
-
 using namespace std;
 
-/*** ³£ÓÃ³£Á¿ ***/
 const double PI = 3.14159265;
 
-/******************************* »ù±¾¼¸ºÎÊı¾İÀàĞÍ *******************************/
-// µã,¶şÎ¬ºÍÈıÎ¬,Í¬Ê±µãÒ²¿ÉÒÔ±íÊ¾Ò»¸öÊ¸Á¿
-struct Point
+/******************************* åŸºæœ¬å‡ ä½•æ•°æ®ç±»å‹ *******************************/
+struct Point // ç‚¹æˆ–çŸ¢é‡
 {
-	double x;	// x×ø±ê
-	double y;	// y×ø±ê
-	double z;	// z×ø±ê£¨Ä¬ÈÏÎª0£¬Èç¹ûĞèÒªÈıÎ¬µãÔò¸øz¸³Öµ£©
-
-	Point(double a = 0, double b = 0, double c = 0) { x = a; y = b; z = c; } // ¹¹Ôìº¯Êı
+	Point(double a = 0.0, double b = 0.0, double c = 0.0)
+	{
+		x = a;
+		y = b;
+		z = c;
+	}
+	double x;
+	double y;
+	double z;
 };
-// µãµÄ¼Ó·¨
-Point add(const Point& lhs, const Point& rhs)
+
+Point add(const Point &lhs, const Point &rhs)
 {
-	Point res;
-
-	res.x = lhs.x + rhs.x;
-	res.y = lhs.y + rhs.y;
-	res.z = lhs.z + rhs.z;
-
-	return res;
+	double x = lhs.x + rhs.x;
+	double y = lhs.y + rhs.y;
+	double z = lhs.z + rhs.z;
+	return Point(x, y, z);
 }
-// µãµÄ¼õ·¨
-Point sub(const Point& lhs, const Point& rhs)
+
+Point sub(const Point &lhs, const Point &rhs)
 {
-	Point res;
-
-	res.x = lhs.x - rhs.x;
-	res.y = lhs.y - rhs.y;
-	res.z = lhs.z - rhs.z;
-
-	return res;
+	double x = lhs.x - rhs.x;
+	double y = lhs.y - rhs.y;
+	double z = lhs.z - rhs.z;
+	return Point(x, y, z);
 }
-// ÏòÁ¿µÄ³Ë·¨
-Point mul(const Point& p, double ratio)
+
+Point mul(const Point &p, double ratio)
 {
-	Point res;
-
-	res.x = p.x * ratio;
-	res.y = p.y * ratio;
-	res.z = p.z * ratio;
-
-	return res;
+	double x = p.x * ratio;
+	double y = p.y * ratio;
+	double z = p.z * ratio;
+	return Point(x, y, z);
 }
-// ÏòÁ¿µÄ³ı·¨
-Point div(const Point& p, double ratio)
+
+Point div(const Point &p, double ratio)
 {
-	Point res;
-
-	res.x = p.x / ratio;
-	res.y = p.y / ratio;
-	res.z = p.z / ratio;
-
-	return res;
+	double x = p.x / ratio;
+	double y = p.y / ratio;
+	double z = p.z / ratio;
+	return Point(x, y, z);
 }
-// µãÅĞ¶ÏÏàµÈ
-bool equal(const Point& lhs, const Point& rhs)
-{
-	return(lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
-}
-// Ïß,°üÀ¨Ïß¶ÎºÍÖ±Ïß
-struct Line
-{
-	Point s;	// Æğµã
-	Point e;	// ÖÕµã
-	bool is_seg; // ÊÇ·ñÊÇÏß¶Î
 
-	Line() {};	// Ä¬ÈÏ¹¹Ôìº¯Êı
-	Line(Point a, Point b, bool _is_seg = true) { s = a; e = b; is_seg = _is_seg; }	// ¹¹Ôìº¯Êı(Ä¬ÈÏÊÇÏß¶Î)
+struct Line // çº¿æ®µæˆ–ç›´çº¿
+{
+	Line(Point a = Point(), Point b = Point(), bool _is_seg = true)
+	{
+		s = a;
+		e = b;
+		is_seg = _is_seg;
+	}
+	Point s;
+	Point e;
+	bool is_seg;
 };
-// Èı½ÇĞÎÆ½Ãæ
-struct Triangle
+
+struct Triangle // ä¸‰è§’å½¢æˆ–å¹³é¢
 {
+	Triangle(Point a = Point(), Point b = Point(), Point c = Point(), bool _is_plane = false)
+	{
+		v0 = a;
+		v1 = b;
+		v2 = c;
+		is_plane = _is_plane;
+	}
 	Point v0;
 	Point v1;
 	Point v2;
 	bool is_plane;
-
-	Triangle() {}; // Ä¬ÈÏ¹¹Ôìº¯Êı
-	Triangle(Point a, Point b, Point c, bool _is_plane = false) { v0 = a; v1 = b; v2 = c; is_plane = _is_plane; }// ¹¹Ôìº¯Êı£¨Ä¬ÈÏÊÇÈı½ÇĞÎ£©
 };
 
-/******************************* ¼ÆËã¼¸ºÎËã·¨Ä¿Â¼ *******************************/
-
-// Ò»¡¢µã
-// 1.1¡¢Á½µãÖ®¼äµÄ¾àÀë
-double distance(const Point& p1, const Point& p2);
-
-// 1.2¡¢Ê¸Á¿³¤¶È
-double length(const Point& vec);
-
-// 1.3¡¢Ê¸Á¿±ê×¼»¯
-Point normalize(const Point& vec);
-
-// 1.4¡¢Ê¸Á¿µã³Ë
-double dotMultiply(const Point& op, const Point& p1, const Point& p2);
-double dotMultiply(const Point& vec1, const Point& vec2);
-
-// 1.5¡¢Ê¸Á¿²æ³Ë
-Point multiply(const Point& op, const Point& p1, const Point& p2);
-Point multiply(const Point& vec1, const Point& vec2);
-
-// 1.6¡¢µãµ½ÏßµÄ¾àÀë
-double ptolDistance(const Point& p, const Line& l);
-
-// 1.7¡¢µãµ½ÏßµÄÍ¶Ó°µã
-Point ptolProjection(const Point& p, const Line& l);
-
-// 1.8¡¢µã¹ØÓÚÏßµÄ¶Ô³Æµã
-Point ptolSymmetry(const Point& p, const Line& l);
-
-// 1.9¡¢µãÊÇ·ñÔÚÏßÉÏ
-bool isponl(const Point& p, const Line& l);
-
-// 1.10¡¢Ê¸Á¿¼Ğ½ÇÕıÏÒ
-double Sin(const Point& op, const Point& p1, const Point& p2);
-double Sin(const Point& vec1, const Point& vec2);
-
-// 1.11¡¢Ê¸Á¿¼Ğ½ÇÓàÏÒ
-double Cos(const Point& op, const Point& p1, const Point& p2);
-double Cos(const Point& vec1, const Point& vec2);
-
-// 1.12¡¢Ê¸Á¿¼Ğ½ÇÕıÇĞ
-double Tan(const Point& op, const Point& p1, const Point& p2);
-double Tan(const Point& vec1, const Point& vec2);
-
-// 1.13¡¢Ê¸Á¿¼Ğ½Ç½Ç¶È
-double Angle(const Point& op, const Point& p1, const Point& p2, bool is_radian = true);
-double Angle(const Point& vec1, const Point& vec, bool is_radian = true);
-
-// 1.14¡¢ÅĞ¶ÏÈıµãÊÇ·ñ¹²Ïß
-bool isPointsCollinear(const Point& p1, const Point& p2, const Point& p3);
-
-// 1.15¡¢ÔÚ£¨-1£¬-1£©µ½£¨1£¬1£©Ëæ»úÉú³Én¸öµã
-vector<Point> randomGenPoints(int num);
-
-// ¶ş¡¢Ïß
-// 2.1¡¢Ïß¶ÎÊÇ·ñÏà½»
-bool isSegIntersect(const Line& l1, const Line& l2, Point& inter_p);
-
-// 2.2¡¢ÇóÖ±ÏßµÄ¼Ğ½Ç
-double angleOfLines(const Line& l1, const Line& l2, bool is_radian = true);
-
-// 2.3¡¢Ò»½×±´Èû¶ûÇúÏß²åÖµ
-vector<Point> firstOrderBezier(const Point& s, const Point& e, int inter_num);
-
-// 2.4¡¢¶ş½×±´Èû¶ûÇúÏß²åÖµ
-vector<Point> secondOrderBezier(const Point& s, const Point& e, const Point& p, int inter_num);
-
-// 2.5¡¢Èı½×±´Èû¶ûÇúÏß²åÖµ
-vector<Point> thirdOrderBezier(const Point& s, const Point& e, const Point& p1, const Point& p2, int inter_num);
-
-// 2.6¡¢ÔÚ£¨-1£¬-1£©µ½£¨1£¬1£©Ëæ»úÉú³ÉnÌõÏß
-vector<Line> randomGenLines(int num);
-
-// Èı¡¢Èı½ÇĞÎ
-// 3.1¡¢Èı½ÇĞÎÈı¸öµãÊÇ·ñÄÜ¹»¹¹³ÉÈı½ÇĞÎ
-bool isTriangle(const Triangle& t);
-
-// 3.2¡¢µãÊÇ·ñÔÚÈı½ÇĞÎÄÚ²¿
-bool isPointInTriangle(const Triangle& t, const Point& p, double& u, double& v);
-
-// 3.3¡¢µãµ½Æ½ÃæµÄÍ¶Ó°µã£¨¾àÀë×î½üµÄµã£©
-Point ptotProjection(const Triangle& t, const Point& p);
-
-// 3.4¡¢µãµ½Æ½ÃæµÄ¾àÀë
-double ptotDistance(const Triangle& t, const Point& p);
-
-// 3.5¡¢Ïß¶ÎºÍÆ½ÃæµÄ½»µã
-Point ltotInterPoint(const Triangle& t, const Line& l);
-
-// 3.6¡¢¼ÆËãÆ½ÃæµÄµ¥Î»·¨ÏòÁ¿
-Point getUnitNormal(const Triangle& t);
-
-// 3.7¡¢¼ÆËãÈı½ÇĞÎµÄÃæ»ı
-double areaOfTriangle(const Triangle& t);
-
-
-// ËÄ¡¢¶à±ßĞÎ
-// 4.1¡¢ÅĞ¶Ï¶à±ßĞÎ¶¥µãµÄ°¼Í¹ĞÔ
-void checkConvex(const vector<Point>& polygon, vector<bool>& flags);
-
-// 4.2¡¢ÅĞ¶Ï¶à±ßĞÎÊÇ·ñÎªÍ¹¶à±ßĞÎ
-bool isConvex(const vector<Point>& polygon);
-
-// 4.3¡¢Çó¶à±ßĞÎÎ§³ÉµÄÃæ»ı
-double areaOfPolygon(const vector<Point>& polygon);
-
-// 4.4¡¢ÅĞ¶Ï¶à±ßĞÎÊÇ·ñ°´ÕÕÄæÊ±ÕëÅÅÁĞ
-bool isConterClock(const vector<Point>& polygon);
-
-// 4.5¡¢ÅĞ¶ÏµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-bool isPointInPolygon(const vector<Point>& polygon, const Point& p);
-
-// 4.6¡¢ÅĞ¶ÏÏß¶ÎÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-bool isSegInPolygon(const vector<Point>& polygon, const Line& l);
-
-// 4.7¡¢ÅĞ¶ÏÔ²ÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-bool isCircleInPolygon(const vector<Point>& polygon, const Point& p, double radius);
-
-// 4.8¡¢Ñ°ÕÒµã¼¯Í¹°üËã·¨£¨grahamËã·¨£©
-vector<Point> findConvexGraham(const vector<Point>& points);
-
-// 4.9¡¢Ñ°ÕÒµã¼¯Í¹°üËã·¨£¨ÉÏÏÂÍ¹°ü·¨£©Ê±¼ä¸´ÔÓ¶ÈO(nlogn)
-vector<Point> findConvex(const vector<Point>& points);
-
-// 4.10¡¢Çó¼òµ¥¶à±ßĞÎÖØĞÄ
-Point centerOfPolygon(const vector<Point>& polygon);
-
-// 4.11¡¢Çó¿Ï¶¨ÔÚ¶à±ßĞÎÄÚ²¿µÄÒ»¸öµã
-Point pointInPolygon(const vector<Point>& polygon);
-
-// 4.12¡¢¼ÆËã¶à±ßĞÎµÄ·¶Î§
-void boxOfPolygon(const vector<Point>& polygon, Point& down_left, Point& up_right);
-
-// Îå¡¢Ô²
-// 5.1¡¢µãºÍÔ²µÄ¹ØÏµ
-int pointToCircle(const Point& c, double radius, const Point& p);
-
-// 5.2¡¢Ö±ÏßºÍÔ²µÄ¹ØÏµ
-int lineToCircle(const Point& c, double radius, const Line& l);
-
-// 5.3¡¢Ïß¶ÎºÍÔ²µÄ¹ØÏµ
-int segToCircle(const Point& c, double radius, const Line& l);
-
-// 5.4¡¢Á½Ô²Ö®¼äµÄ¹ØÏµ
-int circleToCircle(const Point& c1, double raduis1, const Point& c2, double radius2);
-
-
-
-/******************************* ¼ÆËã¼¸ºÎËã·¨ÊµÏÖ *******************************/
-//Ò»¡¢µã
-
-// 1.1¡¢Á½µãÖ®¼äµÄ¾àÀë
-//
-// ²ÎÊı£ºp1 : µÚÒ»¸öµã p2: µÚ¶ş¸öµã
-//  
-double distance(const Point& p1, const Point& p2)
+// ä¸€ã€ç‚¹
+// 1.1ã€è·ç¦»
+double distance(const Point &p1, const Point &p2)
 {
-	return(sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2)));
+	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2) + pow(p1.z - p2.z, 2));
 }
 
-// 1.2¡¢Ê¸Á¿µÄ³¤¶È
-//
-// ²ÎÊı£º vec Ê¸Á¿
-//
-double length(const Point& vec)
+// 1.2ã€é•¿åº¦
+double length(const Point &vec)
 {
-	return (sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2)));
+	return sqrt(pow(vec.x, 2) + pow(vec.y, 2) + pow(vec.z, 2));
 }
 
-// 1.3¡¢Ê¸Á¿±ê×¼»¯£¨Ê¸Á¿µÄ³¤¶È¹æÔ¼µ½1£©
-//
-// ²ÎÊı£º vec £º Ê¸Á¿
-//
-Point normalize(const Point& vec)
+// 1.3ã€æ ‡å‡†åŒ–
+Point normalize(const Point &vec)
 {
-	Point res;
-
-	res = div(vec, length(vec));
-
-	return res;
+	return div(vec, length(vec));
 }
 
-// 1.4¡¢Ê¸Á¿µã³Ë
-//
-// ²ÎÊı£º(p1-op)ÎªÊ¸Á¿1£¬£¨p2-op£©ÎªÊ¸Á¿2
-//
-double dotMultiply(const Point& op, const Point& p1, const Point& p2)
+// 1.4ã€ç‚¹ä¹˜
+double dotMultiply(const Point &vec1, const Point &vec2)
 {
-	return ((p1.x - op.x) * (p2.x - op.x) + (p1.y - op.y) * (p2.y - op.y) + (p1.z - op.z) * (p2.z - op.z));
+	return vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
 }
-// ²ÎÊı£ºvec1ÎªÊ¸Á¿1£¬vec2ÎªÊ¸Á¿2
-//
-double dotMultiply(const Point& vec1, const Point& vec2)
+double dotMultiply(const Point &op, const Point &p1, const Point &p2)
 {
-	return(vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z);
+	return (p1.x - op.x) * (p2.x - op.x) + (p1.y - op.y) * (p2.y - op.y) + (p1.z - op.z) * (p2.z - op.z);
 }
 
-// 1.5¡¢Ê¸Á¿²æ³Ë
-//
-// ²ÎÊı£º(p1-op)ÎªÊ¸Á¿1£¬£¨p2-op£©ÎªÊ¸Á¿2
-// 
-Point multiply(const Point& op, const Point& p1, const Point& p2)
+// 1.5ã€å‰ä¹˜
+Point multiply(const Point &vec1, const Point &vec2)
 {
-	Point result;
-
-	result.x = (p1.y - op.y) * (p2.z - op.z) - (p2.y - op.y) * (p1.z - op.z);
-	result.y = (p1.z - op.z) * (p2.x - op.x) - (p2.z - op.z) * (p1.x - op.x);
-	result.z = (p1.x - op.x) * (p2.y - op.y) - (p2.x - op.x) * (p1.y - op.y);
-
-	return result;
+	double x = vec1.y * vec2.z - vec2.y * vec1.z;
+	double y = vec1.z * vec2.x - vec2.z * vec1.x;
+	double z = vec1.x * vec2.y - vec2.x * vec1.y;
+	return Point(x, y, z);
 }
-// ²ÎÊı£º vec1ÎªÊ¸Á¿1£¬vec2ÎªÊ¸Á¿2
-//
-Point multiply(const Point& vec1, const Point& vec2)
+Point multiply(const Point &op, const Point &p1, const Point &p2)
 {
-	Point result;
-
-	result.x = vec1.y * vec2.z - vec2.y * vec1.z;
-	result.y = vec1.z * vec2.x - vec2.z * vec1.x;
-	result.z = vec1.x * vec2.y - vec2.x * vec1.y;
-
-	return result;
+	double x = (p1.y - op.y) * (p2.z - op.z) - (p2.y - op.y) * (p1.z - op.z);
+	double y = (p1.z - op.z) * (p2.x - op.x) - (p2.z - op.z) * (p1.x - op.x);
+	double z = (p1.x - op.x) * (p2.y - op.y) - (p2.x - op.x) * (p1.y - op.y);
+	return Point(x, y, z);
 }
 
-// 1.6¡¢µãµ½ÏßµÄ¾àÀë
-// 
-// ²ÎÊı£º p : µã  l£ºÖ±Ïß
-//
-double ptolDistance(const Point& p, const Line& l)
+// 1.6ã€ç‚¹åˆ°çº¿çš„è·ç¦»
+// så’Œeæ˜¯çº¿lä¸Šä¸¤ç‚¹ï¼Œoæ˜¯påœ¨åœ¨çº¿lä¸Šçš„æŠ•å½±ç‚¹
+double ptolDistance(const Point &p, const Line &l)
 {
-	Point line_vec = sub(l.e, l.s);
-	Point point_vec = sub(p, l.s);
+	Point line_vec = sub(l.e, l.s); // çŸ¢é‡se
+	Point point_vec = sub(p, l.s);	// çŸ¢é‡sp
 
-	// Ê×ÏÈ¼ÆËãµãÔÚÏß¶ÎÍ¶Ó°³¤¶È
-	double project_len = dotMultiply(line_vec, point_vec) / length(line_vec);
-
-	// ¸ù¾İ¹´¹É¶¨Àí¼ÆËãµãµÄ¾àÀë
-	double distance = sqrt(pow(length(line_vec), 2) - pow(project_len, 2));
-
-	return distance;
+	double line_length = length(line_vec);								 // çŸ¢é‡seé•¿åº¦
+	double project_len = dotMultiply(line_vec, point_vec) / line_length; // æŠ•å½±soé•¿åº¦ï¼ˆæœ‰æ­£è´Ÿï¼‰
+	return sqrt(pow(line_length, 2) - pow(project_len, 2));				 // å‚çº¿poé•¿åº¦ï¼ˆå‹¾è‚¡å®šç†ï¼‰
 }
 
-// 1.7¡¢µãµ½ÏßµÄÍ¶Ó°µã
-//
-// ²ÎÊı£ºp : µã  l : Ïß
-//
-Point ptolProjection(const Point& p, const Line& l)
+// 1.7ã€ç‚¹åˆ°çº¿çš„æŠ•å½±ç‚¹
+// så’Œeæ˜¯çº¿lä¸Šä¸¤ç‚¹ï¼Œoæ˜¯påœ¨åœ¨çº¿lä¸Šçš„æŠ•å½±ç‚¹ï¼Œe'æ˜¯çº¿lä¸Šä¸€ç‚¹æ»¡è¶³se'ä¸ºå•ä½çŸ¢é‡
+Point ptolProjection(const Point &p, const Line &l)
 {
-	Point line_vec = sub(l.e, l.s);
-	Point point_vec = sub(p, l.s);
-	Point unit_line_vec = normalize(line_vec);
+	Point line_vec = sub(l.e, l.s);			   // çŸ¢é‡se
+	Point point_vec = sub(p, l.s);			   // çŸ¢é‡sp
+	Point unit_line_vec = normalize(line_vec); // å•ä½çŸ¢é‡se'
 
-	// ¼ÆËãÍ¶Ó°³¤¶È
-	double project_len = dotMultiply(point_vec, unit_line_vec);
-
-	// Í¶Ó°µã
-	Point project_p = add(l.s, mul(unit_line_vec, project_len));
-
-	return project_p;
+	double project_len = dotMultiply(point_vec, unit_line_vec); // æŠ•å½±soé•¿åº¦ï¼ˆæœ‰æ­£è´Ÿï¼‰
+	return add(l.s, mul(unit_line_vec, project_len));			// æŠ•å½±ç‚¹o = s + se' * project_len
 }
 
-// 1.8¡¢µã¹ØÓÚÏßµÄ¶Ô³Æµã
-//
-// ²ÎÊı£º p : µã  l : ¶Ô³ÆÏß
-//
-Point ptolSymmetry(const Point& p, const Line& l)
+// 1.8ã€ç‚¹å…³äºçº¿çš„å¯¹ç§°ç‚¹
+Point ptolSymmetry(const Point &p, const Line &l)
 {
-	// Ê×ÏÈÇó³öµãÔÚÖ±ÏßÉÏµÄÍ¶Ó°µã
-	Point project_p = ptolProjection(p, l);
-
-	// µãµ½Í¶Ó°µãµÄÏòÁ¿
-	Point project_vec = sub(project_p, p);
-
-	// ¶Ô³Æµã
-	Point symmetry_p = add(p, mul(project_vec, 2));
-
-	return symmetry_p;
+	Point project_p = ptolProjection(p, l); // ç‚¹påœ¨ç›´çº¿lçš„æŠ•å½±ç‚¹o
+	Point project_vec = sub(project_p, p);	// ç‚¹påˆ°æŠ•å½±ç‚¹oçš„å‘é‡po
+	return add(p, mul(project_vec, 2));		// å¯¹ç§°ç‚¹p' = p + po * 2
 }
 
-// 1.9¡¢µãÊÇ·ñÔÚÏßÉÏ
-// Ïß·ÖÎªÖ±ÏßºÍÏß¶Î£¬Ö±Ïß±íÊ¾µÄÊÇÖ±ÏßÊÇ·ñ¾­¹ıµã
-//
-// ²ÎÊı£ºp : µã  l : Ïß¶Î»òÕßÏß
-// 
-bool isponl(const Point& p, const Line& l)
+// 1.9ã€ç‚¹æ˜¯å¦åœ¨çº¿(ç›´çº¿æˆ–çº¿æ®µ)ä¸Š
+bool isponl(const Point &p, const Line &l)
 {
-	Point line_vec = sub(l.e, l.s);
-	Point point_vec1 = sub(p, l.s);
-	Point point_vec2 = sub(p, l.e);
+	Point line_vec = sub(l.e, l.s); // çŸ¢é‡se
+	Point point_vec1 = sub(p, l.s); // çŸ¢é‡sp
+	Point point_vec2 = sub(p, l.e); // çŸ¢é‡ep
 
-	Point mul_vec = multiply(line_vec, point_vec1);
-	double dot = dotMultiply(point_vec1, point_vec2);
-	// µãÊÇ·ñÔÚÏß¶ÎÉÏ
-	if (l.is_seg)
-	{
-		if (equal(p, l.s) || equal(p, l.e))
-			return true;
-		return (0.0 == length(mul_vec) && dot < 0.0);
+	Point mul_vec = multiply(line_vec, point_vec1); // å‰ä¹˜ä¸º0ï¼ŒçŸ¢é‡seå’Œspå…±çº¿
+	if (!l.is_seg)
+		return (0.0 == length(mul_vec)); // ç‚¹åœ¨ç›´çº¿ä¸Š
 
-	}
-	// µãÊÇ·ñÔÚÖ±ÏßÉÏ
-	else
-	{
-		return (0.0 == length(mul_vec));
-	}
+	double dot = dotMultiply(point_vec1, point_vec2); // ç‚¹ä¹˜ï¼ŒçŸ¢é‡spå’Œepçš„ç›¸å¯¹ä½ç½®ï¼ˆç‚¹pæ˜¯å¦ä½äºçº¿æ®µseä¸Šï¼‰
+	return (0.0 == length(mul_vec) && dot <= 0.0);	  // ç‚¹åœ¨çº¿æ®µä¸Š
 }
 
-// 1.10¡¢Ê¸Á¿¼Ğ½ÇÕıÏÒ
-//
-// ²ÎÊı£º op : Ê¸Á¿¹«¹²µã p1 : Ê¸Á¿1¶Ëµã p2 : Ê¸Á¿2¶Ëµã
-//
-double Sin(const Point& op, const Point& p1, const Point& p2)
-{
-	Point vec1 = sub(p1, op);
-	Point vec2 = sub(p2, op);
-
-	return Sin(vec1, vec2);
-}
-// ²ÎÊı£º vec1 Ê¸Á¿1  vec2 Ê¸Á¿2
-// 
-double Sin(const Point& vec1, const Point& vec2)
-{
-	return sqrt(1.0 - pow(Cos(vec1, vec2), 2));
-}
-
-// 1.11¡¢Ê¸Á¿¼Ğ½ÇÓàÏÒ
-//
-// ²ÎÊı£º op : Ê¸Á¿¹«¹²µã p1 : Ê¸Á¿1¶Ëµã p2 : Ê¸Á¿2¶Ëµã
-//
-double Cos(const Point& op, const Point& p1, const Point& p2)
-{
-	Point vec1 = sub(p1, op);
-	Point vec2 = sub(p2, op);
-
-	return Cos(vec1, vec2);
-}
-// ²ÎÊı£º vec1 Ê¸Á¿1  vec2 Ê¸Á¿2
-// 
-double Cos(const Point& vec1, const Point& vec2)
+// 1.10ã€çŸ¢é‡å¤¹è§’ä½™å¼¦
+double Cos(const Point &vec1, const Point &vec2)
 {
 	Point unit_vec1 = normalize(vec1);
 	Point unit_vec2 = normalize(vec2);
-
 	return dotMultiply(unit_vec1, unit_vec2);
 }
-
-// 1.12¡¢Ê¸Á¿¼Ğ½ÇÕıÇĞ
-//
-// ²ÎÊı£º op : Ê¸Á¿¹«¹²µã p1 : Ê¸Á¿1¶Ëµã p2 : Ê¸Á¿2¶Ëµã
-//
-double Tan(const Point& op, const Point& p1, const Point& p2)
+double Cos(const Point &op, const Point &p1, const Point &p2)
 {
 	Point vec1 = sub(p1, op);
 	Point vec2 = sub(p2, op);
-
-	return Tan(vec1, vec2);
+	return Cos(vec1, vec2);
 }
-// ²ÎÊı£º vec1 Ê¸Á¿1  vec2 Ê¸Á¿2
-// 
-double Tan(const Point& vec1, const Point& vec2)
+
+// 1.11ã€çŸ¢é‡å¤¹è§’æ­£å¼¦
+double Sin(const Point &vec1, const Point &vec2)
+{
+	return sqrt(1.0 - pow(Cos(vec1, vec2), 2));
+}
+double Sin(const Point &op, const Point &p1, const Point &p2)
+{
+	Point vec1 = sub(p1, op);
+	Point vec2 = sub(p2, op);
+	return Sin(vec1, vec2);
+}
+
+// 1.12ã€çŸ¢é‡å¤¹è§’æ­£åˆ‡
+double Tan(const Point &vec1, const Point &vec2)
 {
 	double cos = Cos(vec1, vec2);
-	double sin = Sin(vec1, vec2);
-
-	// ·ÖÄ¸²»ÎªÁã
 	if (0.0 == cos)
 		return -1;
-	else
-		return (sin / cos);
-}
 
-// 1.13¡¢¼ÆËãµãµÄ¼Ğ½Ç½Ç¶È
-// ²ÎÊı:  op : Ê¸Á¿¹«¹²µã p1 : Ê¸Á¿1¶Ëµã p2 : Ê¸Á¿2¶Ëµã is_radian : Ä¬ÈÏÎª»¡¶ÈÖÆ
-//
-double Angle(const Point& op, const Point& p1, const Point& p2, bool is_radian)
+	double sin = Sin(vec1, vec2);
+	return sin / cos;
+}
+double Tan(const Point &op, const Point &p1, const Point &p2)
 {
-	double cos_value = Cos(op, p1, p2);
-
-	if (is_radian)
-	{
-		return acos(cos_value);
-	}
-	else
-	{
-		return (acos(cos_value) / PI * 180.0);
-	}
+	Point vec1 = sub(p1, op);
+	Point vec2 = sub(p2, op);
+	return Tan(vec1, vec2);
 }
-// ²ÎÊı£º vec1 : Ê¸Á¿1 vec2 : Ê¸Á¿2
-// 
-double Angle(const Point& vec1, const Point& vec2, bool is_radian)
+
+// 1.13ã€è®¡ç®—ç‚¹çš„å¤¹è§’è§’åº¦
+double Angle(const Point &vec1, const Point &vec2, bool is_radian)
 {
 	double cos_value = Cos(vec1, vec2);
-
 	if (is_radian)
-	{
 		return acos(cos_value);
-	}
-	else
-	{
-		return (acos(cos_value) / PI * 180.0);
-	}
+	return acos(cos_value) / PI * 180.0;
+}
+double Angle(const Point &op, const Point &p1, const Point &p2, bool is_radian)
+{
+	Point vec1 = sub(p1, op);
+	Point vec2 = sub(p2, op);
+	return Angle(vec1, vec2, is_radian);
 }
 
-// 1.14¡¢ÅĞ¶ÏÈıµãÊÇ·ñ¹²Ïß
-bool isPointsCollinear(const Point& p1, const Point& p2, const Point& p3)
+// 1.14ã€åˆ¤æ–­ä¸‰ç‚¹æ˜¯å¦å…±çº¿
+bool isPointsCollinear(const Point &p1, const Point &p2, const Point &p3)
 {
 	Line line(p1, p2, false);
-
-	// ÅĞ¶ÏµÚÈı¸öµãÊÇ·ñÔÚÇ°Á½¸öµãµÄÏß¶ÎÉÏ
-	return isponl(p3, line);
+	return isponl(p3, line); // ç¬¬ä¸‰ä¸ªç‚¹æ˜¯å¦åœ¨å‰ä¸¤ä¸ªç‚¹çš„ç›´çº¿ä¸Š
 }
 
-// 1.15¡¢ÔÚ£¨-1£¬-1£©µ½£¨1£¬1£©Ëæ»úÉú³Én¸öµã
-//
-// ²ÎÊı£º down_left : ÇøÓò×óÏÂ½Ç up_right: ÇøÓòÓÒÉÏ½Ç num : Éú³ÉµãµÄÊıÁ¿
-//
+// 1.15ã€åœ¨ï¼ˆ-1ï¼Œ-1ï¼‰åˆ°ï¼ˆ1ï¼Œ1ï¼‰éšæœºç”Ÿæˆnumä¸ªç‚¹
 vector<Point> randomGenPoints(int num)
 {
-	vector<Point> result;
-
-	std::uniform_real_distribution<double> dist(-0.9, 0.9);
 	std::mt19937 rng;
 	rng.seed(std::random_device{}());
+	std::uniform_real_distribution<double> dist(-0.9, 0.9);
+	vector<Point> result;
 	for (int i = 0; i < num; ++i)
 	{
 		double rand_x = dist(rng);
 		double rand_y = dist(rng);
-
 		result.push_back(Point(rand_x, rand_y));
 	}
 	return result;
 }
 
-// ¶ş¡¢Ïß
-
-// 2.1¡¢Ïß¶ÎÊÇ·ñÏà½»
-// ÆäÖĞÈç¹ûÏß¶ÎµÄ¶ËµãÖØºÏ»òÕßÄ³¸öÏß¶Î¶ËµãÔÚÁíÒ»¸öÏß¶ÎÉÏÒ²ËãÏà½»
-// Ïß¶ÎÅĞ¶ÏÊÇ·ñÏà½»£¬Èç¹ûÊÇÖ±ÏßÔòÏàµ±ÓÚÅĞ¶ÏÊÇ·ñÆ½ĞĞ
-//
-// ²ÎÊı£º l1 : Ïß¶Î1  l2 : Ïß¶Î2  inter_p : Èç¹ûÏà½»·µ»Ø½»µã
-//
-bool isSegIntersect(const Line& l1, const Line& l2, Point& inter_p)
+// äºŒã€çº¿
+// 2.1ã€çº¿æ®µæˆ–ç›´çº¿æ˜¯å¦ç›¸äº¤
+bool isSegIntersect(const Line &l1, const Line &l2, Point &inter_p)
 {
 	Point line1 = sub(l1.e, l1.s);
 	Point line2 = sub(l2.e, l2.s);
 	Point norm1 = normalize(line1);
 	Point norm2 = normalize(line2);
-	// Ïß¶ÎÏà½»
+	// çº¿æ®µç›¸äº¤
 	if (l1.is_seg)
 	{
-		// ¶ËµãÔÚÏß¶ÎÉÏ
+		// ç«¯ç‚¹åœ¨çº¿æ®µä¸Š
 		if (isponl(l1.s, l2))
 		{
 			inter_p = l1.s;
@@ -579,7 +290,7 @@ bool isSegIntersect(const Line& l1, const Line& l2, Point& inter_p)
 			inter_p = l2.e;
 			return true;
 		}
-		// ÅĞ¶ÏÏß¶ÎÊÇ·ñÏà»¥¿çÁ¢
+		// åˆ¤æ–­çº¿æ®µæ˜¯å¦ç›¸äº’è·¨ç«‹
 		double dot1 = dotMultiply(multiply(sub(l2.s, l1.s), line1), multiply(sub(l2.e, l1.s), line1));
 		double dot2 = dotMultiply(multiply(sub(l1.s, l2.s), line2), multiply(sub(l1.e, l2.s), line2));
 		if (dot1 < 0.0 && dot2 < 0.0)
@@ -594,9 +305,8 @@ bool isSegIntersect(const Line& l1, const Line& l2, Point& inter_p)
 		{
 			return false;
 		}
-
 	}
-	// Ö±ÏßÏà½»
+	// ç›´çº¿ç›¸äº¤
 	else
 	{
 		if (Cos(line1, line2) == 1.0)
@@ -610,25 +320,16 @@ bool isSegIntersect(const Line& l1, const Line& l2, Point& inter_p)
 	}
 }
 
-// 2.2¡¢ÇóÖ±ÏßµÄ¼Ğ½Ç
-// 
-// 
-// ²ÎÊı£º l1 : Ïß¶Î1 l2 : Ïß¶Î2
-//
-double angleOfLines(const Line& l1, const Line& l2, bool is_radian)
+// 2.2ã€æ±‚ç›´çº¿çš„å¤¹è§’
+double angleOfLines(const Line &l1, const Line &l2, bool is_radian)
 {
 	Point line1 = sub(l1.e, l1.s);
 	Point line2 = sub(l2.e, l2.s);
-
 	return Angle(line1, line2, is_radian);
 }
 
-// 2.3¡¢Ò»½×±´Èû¶ûÇúÏß²åÖµ
-// 
-// ²ÎÊı£º s£º Æğµã e : ÖÕµã inter_num£º²åÖµµãÊıÁ¿£¨²»°üÀ¨ÆğÊ¼µã£©
-// ·µ»ØÖµ°üÀ¨ÆğÊ¼µã
-//
-vector<Point> firstOrderBezier(const Point& s, const Point& e, int inter_num)
+// 2.3ã€ä¸€é˜¶è´å¡å°”æ›²çº¿æ’å€¼
+vector<Point> firstOrderBezier(const Point &s, const Point &e, int inter_num)
 {
 	vector<Point> res;
 	res.push_back(s);
@@ -639,16 +340,11 @@ vector<Point> firstOrderBezier(const Point& s, const Point& e, int inter_num)
 		res.push_back(add(mul(s, a2), mul(e, a1)));
 	}
 	res.push_back(e);
-
 	return res;
 }
 
-// 2.4¡¢¶ş½×±´Èû¶ûÇúÏß²åÖµ
-// 
-// ²ÎÊı£º s£º Æğµã e : ÖÕµã p : ¿ØÖÆµã inter_num£º²åÖµµãÊıÁ¿£¨²»°üÀ¨ÆğÊ¼µã£©
-// ·µ»ØÖµ°üÀ¨ÆğÊ¼µã
-//
-vector<Point> secondOrderBezier(const Point& s, const Point& e, const Point& p, int inter_num)
+// 2.4ã€äºŒé˜¶è´å¡å°”æ›²çº¿æ’å€¼
+vector<Point> secondOrderBezier(const Point &s, const Point &e, const Point &p, int inter_num)
 {
 	vector<Point> res;
 	res.push_back(s);
@@ -661,16 +357,11 @@ vector<Point> secondOrderBezier(const Point& s, const Point& e, const Point& p, 
 		res.push_back(add(add(mul(s, a3), mul(p, a2)), mul(e, a1)));
 	}
 	res.push_back(e);
-
 	return res;
 }
 
-// 2.5¡¢Èı½×±´Èû¶ûÇúÏß²åÖµ
-// 
-// ²ÎÊı£º s£º Æğµã e : ÖÕµã p1£¬p2 : ¿ØÖÆµã inter_num£º²åÖµµãÊıÁ¿£¨²»°üÀ¨ÆğÊ¼µã£©
-// ·µ»ØÖµ°üÀ¨ÆğÊ¼µã
-//
-vector<Point> thirdOrderBezier(const Point& s, const Point& e, const Point& p1, const Point& p2, int inter_num)
+// 2.5ã€ä¸‰é˜¶è´å¡å°”æ›²çº¿æ’å€¼
+vector<Point> thirdOrderBezier(const Point &s, const Point &e, const Point &p1, const Point &p2, int inter_num)
 {
 	vector<Point> res;
 	res.push_back(s);
@@ -684,21 +375,16 @@ vector<Point> thirdOrderBezier(const Point& s, const Point& e, const Point& p1, 
 		res.push_back(add(add(add(mul(s, a4), mul(p1, a3)), mul(p2, a2)), mul(e, a1)));
 	}
 	res.push_back(e);
-
 	return res;
 }
 
-// 2.6¡¢ÔÚ£¨-1£¬-1£©µ½£¨1£¬1£©Ëæ»úÉú³ÉnÌõÏß
-//
-// ²ÎÊı num : ĞèÒªÉú³ÉµÄÏß¶ÎµÄÊıÁ¿
-//
+// 2.6ã€åœ¨ï¼ˆ-1ï¼Œ-1ï¼‰åˆ°ï¼ˆ1ï¼Œ1ï¼‰éšæœºç”Ÿæˆnumæ¡çº¿
 vector<Line> randomGenLines(int num)
 {
-	vector<Line> result;
-
-	std::uniform_real_distribution<double> dist(-0.9, 0.9);
 	std::mt19937 rng;
 	rng.seed(std::random_device{}());
+	std::uniform_real_distribution<double> dist(-0.9, 0.9);
+	vector<Line> result;
 	for (int i = 0; i < num; ++i)
 	{
 		double rand_sx = dist(rng);
@@ -707,30 +393,22 @@ vector<Line> randomGenLines(int num)
 		double rand_ex = dist(rng);
 		double rand_ey = dist(rng);
 		Point p2(rand_ex, rand_ey);
-		
-		result.push_back(Line(p1,p2,true));
+		result.push_back(Line(p1, p2, true));
 	}
 	return result;
 }
 
-// Èı¡¢Èı½ÇĞÎ
-
-// 3.1¡¢Èı½ÇĞÎÈı¸öµãÊÇ·ñÄÜ¹»¹¹³ÉÈı½ÇĞÎ
-// ²»¹²ÏßµÄÈı¸öµã×é³ÉÒ»¸öÈı½ÇĞÎ
-// 
-// ²ÎÊı£º t : Èı½ÇĞÎ
-// 
-bool isTriangle(const Triangle& t)
+// ä¸‰ã€ä¸‰è§’å½¢
+// 3.1ã€ä¸‰è§’å½¢ä¸‰ä¸ªç‚¹æ˜¯å¦èƒ½å¤Ÿæ„æˆä¸‰è§’å½¢
+bool isTriangle(const Triangle &t)
 {
-	return isPointsCollinear(t.v0, t.v1, t.v2);
+	return !isPointsCollinear(t.v0, t.v1, t.v2);
 }
 
-// 3.2¡¢µãÊÇ·ñÔÚÈı½ÇĞÎÄÚ²¿£¨ÖØĞÄ·¨£©
-// Ëã·¨·½·¨Á´½Ó£º https://www.cnblogs.com/graphics/archive/2010/08/05/1793393.html
-//
-// ²ÎÊı£º t : Èı½ÇĞÎ p : ĞèÒªÅĞ¶ÏµÄµã u,v·Ö±ğÎªÓÃÓÚ±íÊ¾µãÔÚÁ½Ìõ±ßÉÏÍ¶Ó°ÏµÊı
-//
-bool isPointInTriangle(const Triangle& t, const Point& p, double& u, double& v)
+// 3.2ã€ç‚¹æ˜¯å¦åœ¨ä¸‰è§’å½¢å†…éƒ¨ï¼ˆé‡å¿ƒæ³•ï¼‰
+// ç®—æ³•æ–¹æ³•é“¾æ¥ï¼š https://www.cnblogs.com/graphics/archive/2010/08/05/1793393.html
+// å‚æ•°ï¼š t : ä¸‰è§’å½¢ p : éœ€è¦åˆ¤æ–­çš„ç‚¹ u, våˆ†åˆ«ä¸ºç”¨äºè¡¨ç¤ºç‚¹åœ¨ä¸¤æ¡è¾¹ä¸ŠæŠ•å½±ç³»æ•°
+bool isPointInTriangle(const Triangle &t, const Point &p, double &u, double &v)
 {
 	Point vec1 = sub(t.v1, t.v0);
 	Point vec2 = sub(t.v2, t.v0);
@@ -747,170 +425,132 @@ bool isPointInTriangle(const Triangle& t, const Point& p, double& u, double& v)
 	u = (dot11 * dot02 - dot01 * dot12) * inverDeno;
 	v = (dot00 * dot12 - dot01 * dot02) * inverDeno;
 
-	if (u < 0 || u > 1) return false;
-	if (v < 0 || v > 1) return false;
-	if (u + v < 1)return true;
-	else return false;
+	if (u < 0 || u > 1)
+		return false;
+	if (v < 0 || v > 1)
+		return false;
+	if (u + v < 1)
+		return true;
+	else
+		return false;
 }
 
-// 3.3¡¢µãµ½Æ½Ãæ×î½üµÄµã£¬¼´µãµ½Æ½ÃæµÄÍ¶Ó°
-// 
-// ²ÎÊı£ºt : Èı½ÇĞÎ p : µã
-// 
-Point ptotProjection(const Triangle& t, const Point& p)
+// 3.3ã€è®¡ç®—å¹³é¢çš„å•ä½æ³•å‘é‡
+Point getUnitNormal(const Triangle &t)
+{
+	Point vec1 = sub(t.v1, t.v0);
+	Point vec2 = sub(t.v2, t.v0);
+	return normalize(multiply(vec1, vec2));
+}
+
+// 3.4ã€ç‚¹åˆ°å¹³é¢æœ€è¿‘çš„ç‚¹ï¼Œå³ç‚¹åˆ°å¹³é¢çš„æŠ•å½±
+Point ptotProjection(const Triangle &t, const Point &p)
 {
 	Point vec_p = sub(p, t.v0);
 	Point unit_normal = getUnitNormal(t);
 
 	double ratio = dotMultiply(vec_p, unit_normal);
-
 	return sub(p, mul(unit_normal, ratio));
 }
 
-// 3.4¡¢µãµ½Æ½ÃæµÄ¾àÀë
-//
-// ²ÎÊı£º t : Èı½ÇĞÎËùÔÚµÄÆ½Ãæ p : ĞèÒªÅĞ¶ÏµÄµã
-//
-double ptotDistance(const Triangle& t, const Point& p)
-{
-	Point project_p = ptotProjection(t, p);
-
-	return distance(p, project_p);
-}
-
-// 3.5¡¢Ïß¶ÎºÍÆ½ÃæµÄ½»µã
-// 
-// ²ÎÊı£º t : Èı½ÇĞÎËùÔÚÆ½Ãæ l : Ö±Ïß
-//
-Point ltotInterPoint(const Triangle& t, const Line& l)
+// 3.5ã€çº¿æ®µå’Œå¹³é¢çš„äº¤ç‚¹
+Point ltotInterPoint(const Triangle &t, const Line &l)
 {
 	Point line_vec = sub(l.e, l.s);
 	Point point_vec = sub(t.v0, l.s);
 	Point unit_plane_normal = getUnitNormal(t);
 
 	double ratio = dotMultiply(point_vec, unit_plane_normal) / dotMultiply(unit_plane_normal, line_vec);
-
 	return add(l.s, mul(line_vec, ratio));
 }
 
-// 3.6¡¢¼ÆËãÆ½ÃæµÄµ¥Î»·¨ÏòÁ¿
-// 
-// ²ÎÊı£º t : Èı½ÇĞÎÆ½Ãæ
-// 
-Point getUnitNormal(const Triangle& t)
+// 3.6ã€ç‚¹åˆ°å¹³é¢çš„è·ç¦»
+double ptotDistance(const Triangle &t, const Point &p)
 {
-	Point vec1 = sub(t.v1, t.v0);
-	Point vec2 = sub(t.v2, t.v0);
-
-	return normalize(multiply(vec1, vec2));
+	Point project_p = ptotProjection(t, p);
+	return distance(p, project_p);
 }
 
-// 3.7¡¢¼ÆËãÈı½ÇĞÎµÄÃæ»ı
-//
-// ²ÎÊı£º t : Èı½ÇĞÎÆ½Ãæ
-//
-double areaOfTriangle(const Triangle& t)
+// 3.7ã€è®¡ç®—ä¸‰è§’å½¢çš„é¢ç§¯
+double areaOfTriangle(const Triangle &t)
 {
-	return (0.5 * length(multiply(sub(t.v1, t.v0), sub(t.v2, t.v0))));
+	return 0.5 * length(multiply(sub(t.v1, t.v0), sub(t.v2, t.v0)));
 }
 
-// ËÄ¡¢¶à±ßĞÎ
-// Èç¹ûÃ»ÓĞÌØ±ğËµÃ÷£¬ÔòÄ¬ÈÏÊäÈë¶à±ßĞÎ¶¥µã°´ÕÕÄæÊ±ÕëÅÅÁĞ£¬µãÎª¶şÎ¬µã¼´z=0
-
-// 4.1¡¢ÅĞ¶Ï¶à±ßĞÎ¶¥µãµÄ°¼Í¹ĞÔ
-// 
-// ²ÎÊı£º polygon : ¶à±ßĞÎµã¼¯ºÏ flags : ±êÖ¾Ã¿¸öµãÊÇ·ñÊÇÍ¹µÄ
-//
-void checkConvex(const vector<Point>& polygon, vector<bool>& flags)
+// å››ã€å¤šè¾¹å½¢ï¼ˆé»˜è®¤é€†æ—¶é’ˆæ’åˆ—ï¼ŒäºŒç»´ç‚¹ï¼‰
+// 4.1ã€åˆ¤æ–­å¤šè¾¹å½¢é¡¶ç‚¹çš„å‡¹å‡¸æ€§
+// å‚æ•°ï¼š polygon : å¤šè¾¹å½¢ç‚¹é›†åˆ flags : æ ‡å¿—æ¯ä¸ªç‚¹æ˜¯å¦æ˜¯å‡¸çš„
+void checkConvex(const vector<Point> &polygon, vector<bool> &flags)
 {
 	flags.resize(polygon.size());
 
-	// ÕÒµ½µÚÒ»¸öÍ¹µÄ¶¥µã
+	// æ‰¾åˆ°ç¬¬ä¸€ä¸ªå‡¸çš„é¡¶ç‚¹
 	int index = 0;
 	for (int i = 1; i < polygon.size(); ++i)
 	{
-		if (polygon[i].y < polygon[index].y ||
-			(polygon[i].y == polygon[index].y && polygon[i].x < polygon[index].x))
-		{
+		if (polygon[i].y < polygon[index].y || (polygon[i].y == polygon[index].y && polygon[i].x < polygon[index].x))
 			index = i;
-		}
 	}
-	/* ÅĞ¶ÏÃ¿¸öµãµÄ°¼Í¹ĞÔ
-	*  Í¨¹ıÅĞ¶ÏÇ°ºóÁ½¸öµãµÄÏòÁ¿²æ³ËÅĞ¶ÏÊÇ·ñÂú×ãÄæÊ±Õë
-	*/
+	/* åˆ¤æ–­æ¯ä¸ªç‚¹çš„å‡¹å‡¸æ€§
+	 *  é€šè¿‡åˆ¤æ–­å‰åä¸¤ä¸ªç‚¹çš„å‘é‡å‰ä¹˜åˆ¤æ–­æ˜¯å¦æ»¡è¶³é€†æ—¶é’ˆ
+	 */
 	int size = polygon.size() - 1;
 	flags[index] = true;
 	while (size)
 	{
 		if (multiply(polygon[index], polygon[(index + 1) % size], polygon[(index + 2) % size]).z >= 0)
-		{
 			flags[(index + 1) % size] = true;
-		}
 		else
-		{
 			flags[(index + 1) % size] = false;
-		}
 		index++;
 		size--;
 	}
 }
 
-// 4.2¡¢ÅĞ¶Ï¶à±ßĞÎÊÇ·ñÎªÍ¹¶à±ßĞÎ
-//
-// ²ÎÊı £º polygon : ÊäÈëµÄ¶à±ßĞÎ¶¥µã
-//
-bool isConvex(const vector<Point>& polygon)
+// 4.2ã€åˆ¤æ–­å¤šè¾¹å½¢æ˜¯å¦ä¸ºå‡¸å¤šè¾¹å½¢
+bool isConvex(const vector<Point> &polygon)
 {
 	vector<bool> flags;
-	// ÅĞ¶ÏÃ¿¸öµãµÄ°¼Í¹ĞÔ
+	// åˆ¤æ–­æ¯ä¸ªç‚¹çš„å‡¹å‡¸æ€§
 	checkConvex(polygon, flags);
-	// Èç¹ûÓĞÒ»¸öµã²»ÊÇÍ¹µÄ£¬Ôò´Ë¶à±ßĞÎÎª·ÇÍ¹
+	// å¦‚æœæœ‰ä¸€ä¸ªç‚¹ä¸æ˜¯å‡¸çš„ï¼Œåˆ™æ­¤å¤šè¾¹å½¢ä¸ºéå‡¸
 	for (auto c : flags)
 		if (!c)
 			return false;
 	return true;
 }
 
-// 4.3¡¢Çó¶à±ßĞÎÎ§³ÉµÄÃæ»ı
-//
-// ²ÎÊı£º polygon : ¶à±ßĞÎ
-//
-double areaOfPolygon(const vector<Point>& polygon)
+// 4.3ã€æ±‚å¤šè¾¹å½¢å›´æˆçš„é¢ç§¯
+double areaOfPolygon(const vector<Point> &polygon)
 {
-	// Èç¹û¶à±ßĞÎµãµÄÊıÁ¿ÉÙÓÚÈı¸öÔò·Ç·¨
+	// å¦‚æœå¤šè¾¹å½¢ç‚¹çš„æ•°é‡å°‘äºä¸‰ä¸ªåˆ™éæ³•
 	int size = polygon.size();
-	if (size < 3) return 0;
+	if (size < 3)
+		return 0;
 
 	double area(0.0);
 	for (int i = 0; i < size; ++i)
-	{
 		area += polygon[i].y * (polygon[(i - 1 + size) % size].x - polygon[(i + 1) % size].x);
-	}
-
 	return (area / 2);
 }
 
-// 4.4¡¢ÅĞ¶Ï¶à±ßĞÎÊÇ·ñ°´ÕÕÄæÊ±ÕëÅÅÁĞ
-//
-// ²ÎÊı£º polygon : ¶à±ßĞÎ
-//
-bool isConterClock(const vector<Point>& polygon)
+// 4.4ã€åˆ¤æ–­å¤šè¾¹å½¢æ˜¯å¦æŒ‰ç…§é€†æ—¶é’ˆæ’åˆ—
+// å‚æ•°ï¼š polygon : å¤šè¾¹å½¢
+bool isConterClock(const vector<Point> &polygon)
 {
 	return areaOfPolygon(polygon) > 0;
 }
 
-// 4.5¡¢ÅĞ¶ÏµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-// ÅĞ¶Ï´ÓµãÒı³öÒ»ÌõÏß¶ÎÓë¶à±ßĞÎµÄ½»µãµÄ¸öÊı
-// ÆæÊı¸öÔòÏà½»¡¢Å¼Êı¸öÔò²»Ïà½»
-// 
-// ²ÎÊı£º polygon : ¶à±ßĞÎ p : ĞèÒªÅĞ¶ÏµÄµã
-//
-bool isPointInPolygon(const vector<Point>& polygon, const Point& p)
+// 4.5ã€åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨
+// åˆ¤æ–­ä»ç‚¹å¼•å‡ºä¸€æ¡çº¿æ®µä¸å¤šè¾¹å½¢çš„äº¤ç‚¹çš„ä¸ªæ•°
+// å¥‡æ•°ä¸ªåˆ™ç›¸äº¤ã€å¶æ•°ä¸ªåˆ™ä¸ç›¸äº¤
+// å‚æ•°ï¼š polygon : å¤šè¾¹å½¢ p : éœ€è¦åˆ¤æ–­çš„ç‚¹
+bool isPointInPolygon(const vector<Point> &polygon, const Point &p)
 {
 	Point down_left, up_right;
 	boxOfPolygon(polygon, down_left, up_right);
 
-	// Î»ÓÚ¶à±ßĞÎÍâ²¿Ò»µã
+	// ä½äºå¤šè¾¹å½¢å¤–éƒ¨ä¸€ç‚¹
 	Point out_p = sub(down_left, Point(10.0, 0.0));
 
 	int cnt(0);
@@ -922,25 +562,22 @@ bool isPointInPolygon(const vector<Point>& polygon, const Point& p)
 		Line seg(s, e, true);
 		Point inter_p;
 		if (isSegIntersect(p_line, seg, inter_p))
-		{
 			cnt++;
-		}
 	}
 
 	return (cnt % 2 == 1);
 }
 
-// 4.6¡¢ÅĞ¶ÏÏß¶ÎÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-// Ïß¶ÎÔÚ¶à±ßĞÎÄÚ²¿µÄÌõ¼şÊÇÁ½¸ö¶Ëµã¶¼ÔÚ¶à±ßĞÎÄÚÇÒ²»Óë¶à±ßĞÎÏà½»
-// 
-// ²ÎÊı£º polygon : ¶à±ßĞÎ l £º Ïß¶Î
-bool isSegInPolygon(const vector<Point>& polygon, const Line& l)
+// 4.6ã€åˆ¤æ–­çº¿æ®µæ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨
+// çº¿æ®µåœ¨å¤šè¾¹å½¢å†…éƒ¨çš„æ¡ä»¶æ˜¯ä¸¤ä¸ªç«¯ç‚¹éƒ½åœ¨å¤šè¾¹å½¢å†…ä¸”ä¸ä¸å¤šè¾¹å½¢ç›¸äº¤
+// å‚æ•°ï¼š polygon : å¤šè¾¹å½¢ l ï¼š çº¿æ®µ
+bool isSegInPolygon(const vector<Point> &polygon, const Line &l)
 {
-	// Ê×ÏÈÅĞ¶ÏÏß¶Î¶ËµãÊÇ·ñ¶¼ÔÚ¶à±ßĞÎÄÚ²¿
+	// é¦–å…ˆåˆ¤æ–­çº¿æ®µç«¯ç‚¹æ˜¯å¦éƒ½åœ¨å¤šè¾¹å½¢å†…éƒ¨
 	bool is_s_in = isPointInPolygon(polygon, l.s);
 	bool is_e_in = isPointInPolygon(polygon, l.e);
 
-	// È»ºóÅĞ¶ÏÏß¶ÎÊÇ·ñÏà½»
+	// ç„¶ååˆ¤æ–­çº¿æ®µæ˜¯å¦ç›¸äº¤
 	if (is_s_in && is_e_in)
 	{
 		for (int i = 0; i < polygon.size(); ++i)
@@ -950,9 +587,7 @@ bool isSegInPolygon(const vector<Point>& polygon, const Line& l)
 			Line seg(s, e, true);
 			Point inter_p;
 			if (isSegIntersect(l, seg, inter_p))
-			{
 				return false;
-			}
 		}
 		return true;
 	}
@@ -962,17 +597,15 @@ bool isSegInPolygon(const vector<Point>& polygon, const Line& l)
 	}
 }
 
-// 4.7¡¢ÅĞ¶ÏÔ²ÊÇ·ñÔÚ¶à±ßĞÎÄÚ²¿
-// Ö»ÓĞ¶à±ßĞÎËùÓĞµÄ±ß¶¼ÔÚÔ²µÄÍâ²¿£¬Ô²²Å´¦ÓÚ¶à±ßĞÎÄÚ²¿
-//
-//	²ÎÊı£º polygon : ¶à±ßĞÎ c : Ô²ĞÄ radius £º °ë¾¶
-//
-bool isCircleInPolygon(const vector<Point>& polygon, const Point& c, double radius)
+// 4.7ã€åˆ¤æ–­åœ†æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…éƒ¨
+// åªæœ‰å¤šè¾¹å½¢æ‰€æœ‰çš„è¾¹éƒ½åœ¨åœ†çš„å¤–éƒ¨ï¼Œåœ†æ‰å¤„äºå¤šè¾¹å½¢å†…éƒ¨
+//	å‚æ•°ï¼š polygon : å¤šè¾¹å½¢ c : åœ†å¿ƒ radius ï¼š åŠå¾„
+bool isCircleInPolygon(const vector<Point> &polygon, const Point &c, double radius)
 {
 	for (int i = 0; i < polygon.size(); ++i)
 	{
-		const Point& p1 = polygon[i];
-		const Point& p2 = polygon[(i + 1) % polygon.size()];
+		const Point &p1 = polygon[i];
+		const Point &p2 = polygon[(i + 1) % polygon.size()];
 		Line line(p1, p2, true);
 		if (segToCircle(c, radius, line) != 2)
 			return false;
@@ -980,31 +613,27 @@ bool isCircleInPolygon(const vector<Point>& polygon, const Point& c, double radi
 	return true;
 }
 
-// 4.8¡¢Ñ°ÕÒµã¼¯Í¹°üËã·¨£¨grahamËã·¨£©
-// Ëã·¨Á´½Ó£ºhttps://blog.csdn.net/acm_zl/article/details/9342631
-//
-// ²ÎÊı£º points £º Æ½Ãæµã¼¯
-//Ä¿Ç°ÊµÏÖµÄ°æ±¾ÓĞÎÊÌâ
-vector<Point> findConvexGraham(const vector<Point>& points)
+// 4.8ã€å¯»æ‰¾ç‚¹é›†å‡¸åŒ…ç®—æ³•ï¼ˆgrahamç®—æ³•ï¼‰
+// ç®—æ³•é“¾æ¥ï¼šhttps://blog.csdn.net/acm_zl/article/details/9342631
+// å‚æ•°ï¼š points ï¼š å¹³é¢ç‚¹é›†
+// ç›®å‰å®ç°çš„ç‰ˆæœ¬æœ‰é—®é¢˜
+vector<Point> findConvexGraham(const vector<Point> &points)
 {
 	vector<Point> result;
 
-	// µãµÄÊıÁ¿±ØĞë´óÓÚÈı¸ö
+	// ç‚¹çš„æ•°é‡å¿…é¡»å¤§äºä¸‰ä¸ª
 	if (points.size() < 3)
 		return result;
 
-	// Ñ°ÕÒ×îµ×²¿µÄµã
+	// å¯»æ‰¾æœ€åº•éƒ¨çš„ç‚¹
 	int index = 0;
 	for (int i = 0; i < points.size(); ++i)
-	{
 		if (points[i].y < points[index].y)
-		{
 			index = i;
-		}
-	}
+
 	Point convex_p = points[index];
 
-	// ¼ÆËãÃ¿¸öµãµÄ¼«½Ç
+	// è®¡ç®—æ¯ä¸ªç‚¹çš„æè§’
 	map<double, int> cos_map;
 	Point x_vec(1.0, 0.0);
 	for (int i = 0; i < points.size(); ++i)
@@ -1012,7 +641,7 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 		if (i != index)
 		{
 			double cos_value = Cos(sub(points[i], convex_p), x_vec);
-			// Èç¹ûÓĞ¶à¸öµãÓĞÏàÍ¬µÄ¼«½Ç£¬ÔòÈ¡×îÔ¶µÄµã
+			// å¦‚æœæœ‰å¤šä¸ªç‚¹æœ‰ç›¸åŒçš„æè§’ï¼Œåˆ™å–æœ€è¿œçš„ç‚¹
 			if (cos_map.count(-cos_value) != 0)
 			{
 				if (length(points[i]) > length(points[cos_map[-cos_value]]))
@@ -1023,9 +652,9 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 		}
 	}
 
-	// ±£´æ½á¹ûµÄÕ»
+	// ä¿å­˜ç»“æœçš„æ ˆ
 	stack<int> result_stack;
-	// ´æÈë¿ªÊ¼µÄÁ½¸öµã
+	// å­˜å…¥å¼€å§‹çš„ä¸¤ä¸ªç‚¹
 	result_stack.push(index);
 	result_stack.push(cos_map.begin()->second);
 
@@ -1042,7 +671,7 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 		result_stack.push(iter->second);
 	}
 
-	// ½«Êı¾İ´ÓÕ»ÖĞ¶ÁÈ¡
+	// å°†æ•°æ®ä»æ ˆä¸­è¯»å–
 	while (!result_stack.empty())
 	{
 		result.push_back(points[result_stack.top()]);
@@ -1054,30 +683,30 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 	return result;
 }
 
-//// 4.9¡¢Ñ°ÕÒµã¼¯Í¹°üËã·¨£¨ÉÏÏÂÍ¹°ü·¨£©Ê±¼ä¸´ÔÓ¶ÈO(nlogn)
+//// 4.9ã€å¯»æ‰¾ç‚¹é›†å‡¸åŒ…ç®—æ³•ï¼ˆä¸Šä¸‹å‡¸åŒ…æ³•ï¼‰æ—¶é—´å¤æ‚åº¦O(nlogn)
 ////
-////	²ÎÊı£º points : Æ½Ãæµã¼¯
+////	å‚æ•°ï¼š points : å¹³é¢ç‚¹é›†
 ////
-//// µã¸ù¾İ×ÖµäĞòµÄ±È½Ïº¯Êı
-//bool cmp(Point a, Point b)
+//// ç‚¹æ ¹æ®å­—å…¸åºçš„æ¯”è¾ƒå‡½æ•°
+// bool cmp(Point a, Point b)
 //{
 //	if (a.x == b.x)
 //		return a.y < b.y;
 //	return a.x < b.x;
-//}
-//vector<Point> findConvex(const vector<Point>& points)
+// }
+// vector<Point> findConvex(const vector<Point>& points)
 //{
 //	vector<Point> result;
 //	if (points.size() < 3)
 //		return result;
 //
 //	vector<Point> tmp_points = points;
-//	// Ê×ÏÈ½«ËùÓĞµã°´ÕÕ×ÖµäĞòÅÅĞò
+//	// é¦–å…ˆå°†æ‰€æœ‰ç‚¹æŒ‰ç…§å­—å…¸åºæ’åº
 //	sort(tmp_points.begin(), tmp_points.end(), cmp);
 //
-//	// ÉÏÍ¹°ü
+//	// ä¸Šå‡¸åŒ…
 //	vector<Point> upper_hull;
-//	// ´æÈëµÚÒ»¸öºÍµÚ¶ş¸öµã
+//	// å­˜å…¥ç¬¬ä¸€ä¸ªå’Œç¬¬äºŒä¸ªç‚¹
 //	upper_hull.push_back(tmp_points[0]);
 //	upper_hull.push_back(tmp_points[1]);
 //	for (int i = 2; i < tmp_points.size(); ++i)
@@ -1088,9 +717,9 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 //			upper_hull.erase(upper_hull.end() - 2);
 //		}
 //	}
-//	// ÏÂÍ¹°ü
+//	// ä¸‹å‡¸åŒ…
 //	vector<Point> lower_hull;
-//	// ´æÈëµ¹ÊıµÚÒ»µÚ¶ş¸öµã
+//	// å­˜å…¥å€’æ•°ç¬¬ä¸€ç¬¬äºŒä¸ªç‚¹
 //	lower_hull.push_back(tmp_points[tmp_points.size() - 1]);
 //	lower_hull.push_back(tmp_points[tmp_points.size() - 2]);
 //	for (int i = tmp_points.size() - 3; i >= 0; --i)
@@ -1101,24 +730,22 @@ vector<Point> findConvexGraham(const vector<Point>& points)
 //			lower_hull.erase(lower_hull.end() - 1);
 //		}
 //	}
-//	// É¾³ıÖØ¸´µã
+//	// åˆ é™¤é‡å¤ç‚¹
 //	lower_hull.erase(lower_hull.begin());
 //	lower_hull.erase(lower_hull.end() - 1);
 //
-//	// ºÏ²¢ÉÏÏÂÍ¹°ü
+//	// åˆå¹¶ä¸Šä¸‹å‡¸åŒ…
 //	upper_hull.insert(upper_hull.end(), lower_hull.begin(), lower_hull.end());
 //
 //	result = upper_hull;
 //
 //	return result;
-//}
+// }
 
-// 4.10¡¢Çó¼òµ¥¶à±ßĞÎÖØĞÄ
-// Ëã·¨Ô­ÀíÁ´½Ó£º
-//
-// ²ÎÊı£º polygon £º ¼òµ¥¶à±ßĞÎ
-//
-Point centerOfPolygon(const vector<Point>& polygon)
+// 4.10ã€æ±‚ç®€å•å¤šè¾¹å½¢é‡å¿ƒ
+// ç®—æ³•åŸç†é“¾æ¥ï¼š
+// å‚æ•°ï¼š polygon ï¼š ç®€å•å¤šè¾¹å½¢
+Point centerOfPolygon(const vector<Point> &polygon)
 {
 	double polygon_area(0.0);
 	Point center;
@@ -1141,19 +768,16 @@ Point centerOfPolygon(const vector<Point>& polygon)
 	return center;
 }
 
-// 4.11¡¢Çó¿Ï¶¨ÔÚ¶à±ßĞÎÄÚ²¿µÄÒ»¸öµã
-// ¶¨Àí1: Ã¿¸ö¶à±ßĞÎÖÁÉÙÓĞÒ»¸öÍ¹¶¥µã£¬
-//		  x×ø±ê×î´ó¡¢×îĞ¡µÄµã¿Ï¶¨ÊÇÍ¹¶¥µã£¬y×ø±ê×î´ó¡¢×îĞ¡µÄµã¿Ï¶¨ÊÇÍ¹¶¥µã
-// ¶¨Àí2£º¶¥µãÊı>= 4µÄ¼òµ¥¶à±ßĞÎÖÁÉÙÓĞÒ»Ìõ¶Ô½ÇÏß
-//
-// ²ÎÊı£º polygon £º ¼òµ¥¶à±ßĞÎ
-//
-Point pointInPolygon(const vector<Point>& polygon)
+// 4.11ã€æ±‚è‚¯å®šåœ¨å¤šè¾¹å½¢å†…éƒ¨çš„ä¸€ä¸ªç‚¹
+// å®šç†1: æ¯ä¸ªå¤šè¾¹å½¢è‡³å°‘æœ‰ä¸€ä¸ªå‡¸é¡¶ç‚¹ï¼Œxåæ ‡æœ€å¤§ã€æœ€å°çš„ç‚¹è‚¯å®šæ˜¯å‡¸é¡¶ç‚¹ï¼Œyåæ ‡æœ€å¤§ã€æœ€å°çš„ç‚¹è‚¯å®šæ˜¯å‡¸é¡¶ç‚¹
+// å®šç†2ï¼šé¡¶ç‚¹æ•°>= 4çš„ç®€å•å¤šè¾¹å½¢è‡³å°‘æœ‰ä¸€æ¡å¯¹è§’çº¿
+// å‚æ•°ï¼š polygon ï¼š ç®€å•å¤šè¾¹å½¢
+Point pointInPolygon(const vector<Point> &polygon)
 {
-	// Í¹¶¥µãºÍË÷Òı
+	// å‡¸é¡¶ç‚¹å’Œç´¢å¼•
 	int index = 0;
 	Point convex_p = polygon[0];
-	// Ñ°ÕÒÒ»¸öÍ¹¶¥µã
+	// å¯»æ‰¾ä¸€ä¸ªå‡¸é¡¶ç‚¹
 	for (int i = 0; i < polygon.size(); ++i)
 	{
 		if (polygon[i].y < convex_p.y)
@@ -1162,7 +786,7 @@ Point pointInPolygon(const vector<Point>& polygon)
 			convex_p = polygon[i];
 		}
 	}
-	// »ñÈ¡Í¹¶¥µãÇ°ºóÒ»¸öµã
+	// è·å–å‡¸é¡¶ç‚¹å‰åä¸€ä¸ªç‚¹
 	int size = polygon.size();
 	Point pre_p = polygon[(index - 1 + size) % size];
 	Point next_p = polygon[(index + 1) % size];
@@ -1181,21 +805,16 @@ Point pointInPolygon(const vector<Point>& polygon)
 			min_d = distance(convex_p, polygon[i]);
 		}
 	}
-	// ÈçºÎÃ»ÓĞ¶¥µãÔÚÈı½ÇĞÎÄÚ²¿£¬Ôò·µ»ØÇ°ºóµãµÄÖĞµã
+	// å¦‚ä½•æ²¡æœ‰é¡¶ç‚¹åœ¨ä¸‰è§’å½¢å†…éƒ¨ï¼Œåˆ™è¿”å›å‰åç‚¹çš„ä¸­ç‚¹
 	if (!flag)
-	{
 		return div(add(pre_p, next_p), 2);
-	}
-	// ·µ»Ø×î½üµãºÍÍ¹¶¥µãµÄÖĞµã
+
+	// è¿”å›æœ€è¿‘ç‚¹å’Œå‡¸é¡¶ç‚¹çš„ä¸­ç‚¹
 	return div(add(convex_p, min_p), 2);
 }
 
-// 4.12¡¢»ñÈ¡¶à±ßĞÎµÄ°üÎ§ÂÖÀª
-// ¼´¶à±ßĞÎµÄ×îĞ¡°üÎ§ºĞ£¬ÓÉ×óÏÂºÍÓÒÉÏÁ½¸öµã±íÊ¾
-//
-// ²ÎÊı£º polygon : ¶à±ßĞÎ down_left : ×óÏÂµã  up_right : ÓÒÉÏµã
-//
-void boxOfPolygon(const vector<Point>& polygon, Point& down_left, Point& up_right)
+// 4.12ã€å¤šè¾¹å½¢çš„æœ€å°çŸ©å½¢åŒ…å›´è½®å»“
+void boxOfPolygon(const vector<Point> &polygon, Point &down_left, Point &up_right)
 {
 	double max_x = double(INT_MIN), min_x = double(INT_MAX);
 	double max_y = double(INT_MIN), min_y = double(INT_MAX);
@@ -1212,82 +831,68 @@ void boxOfPolygon(const vector<Point>& polygon, Point& down_left, Point& up_righ
 	up_right = Point(max_x, max_y);
 }
 
-
-// Îå¡¢Ô²
-// 5.1¡¢µãºÍÔ²µÄ¹ØÏµ
-//
-// ²ÎÊı£º c: Ô²ĞÄ radiuns £º Ô²µÄ°ë¾¶  p : ÅĞ¶ÏµÄµã
-// ·µ»ØÖµ £º 0 £º Ô²ÄÚ 1 £º Ô²ÉÏ 2£º Ô²Íâ
-//
-int pointToCircle(const Point& c, double radius, const Point& p)
+// äº”ã€åœ†
+// 5.1ã€ç‚¹å’Œåœ†çš„å…³ç³»
+// 0ï¼šåœ†å†…ï¼Œ 1ï¼šåœ†ä¸Šï¼Œ 2ï¼šåœ†å¤–
+int pointToCircle(const Point &c, double radius, const Point &p)
 {
 	double ptoc_d = distance(c, p);
-
 	if (ptoc_d < radius)
 		return 0;
-	else if (ptoc_d == radius)
+	if (ptoc_d == radius)
 		return 1;
-	else
-		return 2;
+	return 2;
 }
 
-// 5.2¡¢Ö±ÏßºÍÔ²µÄ¹ØÏµ
-//
-// ²ÎÊı£º c: Ô²ĞÄ radiuns £º Ô²µÄ°ë¾¶  l : ÅĞ¶ÏµÄÖ±Ïß
-// ·µ»ØÖµ £º 0 £º Ïà½» 1 £ºÏàÇĞ  2£º ÏàÀë
-//
-int lineToCircle(const Point& c, double radius, const Line& l)
+// 5.2ã€ç›´çº¿å’Œåœ†çš„å…³ç³»
+// 0ï¼šç›¸äº¤ï¼Œ 1ï¼šç›¸åˆ‡ï¼Œ 2ï¼šç›¸ç¦»
+int lineToCircle(const Point &c, double radius, const Line &l)
 {
 	double ctol_d = ptolDistance(c, l);
-
 	if (ctol_d < radius)
 		return 0;
-	else if (ctol_d == radius)
+	if (ctol_d == radius)
 		return 1;
-	else
-		return 2;
+	return 2;
 }
 
-// 5.3¡¢Ïß¶ÎºÍÔ²µÄ¹ØÏµ
-//
-// ²ÎÊı£º c: Ô²ĞÄ radiuns £º Ô²µÄ°ë¾¶  l : ÅĞ¶ÏµÄÏß¶Î
-// ·µ»ØÖµ £º 0 £º Ô²ÄÚ 1 £º ÓëÔ²Ïà½»  2£º Ô²Íâ
-//
-int segToCircle(const Point& c, double radius, const Line& l)
+// 5.3ã€çº¿æ®µå’Œåœ†çš„å…³ç³»
+// 0ï¼šåœ†å†…ï¼Œ 1ï¼šç›¸äº¤ï¼Œ  2ï¼šåœ†å¤–
+int segToCircle(const Point &c, double radius, const Line &l)
 {
-	double ctol_d = ptolDistance(c, l);
+	int flag = pointToCircle(c, radius, l.s) + pointToCircle(c, radius, l.e);
+	if (flag == 0) // 0+0ï¼Œä¸¤ä¸ªç«¯ç‚¹éƒ½åœ¨åœ†å†…
+		return 0;
+	if (flag < 4)
+		return 1; // åœ†ä¸Šè‡³å°‘ä¸€ä¸ªç«¯ç‚¹
 
-	if (ctol_d > radius)
-		return 2;
-	else if (ctol_d == radius)
-		return 1;
-	else
+	// 2+2ï¼Œä¸¤ä¸ªç«¯ç‚¹éƒ½åœ¨åœ†å¤–
+	int distance = ptolDistance(c, l);
+	if (distance <= radius)
 	{
-		Point project_p = ptolProjection(c, l);
-		if (isponl(project_p, l))
+		Point project_p = ptolProjection(c, l); // ç‚¹åœ¨çº¿ä¸Šçš„æŠ•å½±ç‚¹
+		if (isponl(project_p, l))				// æŠ•å½±ç‚¹ä½äºçº¿æ®µä¸Š
 			return 1;
-		else
-			return 2;
 	}
+	return 2;
 }
 
-// 5.4¡¢Á½Ô²Ö®¼äµÄ¹ØÏµ
-// 
-// ²ÎÊı£º c1 : Ô²1Ô²ĞÄ£¬r1 Ô²1°ë¾¶ c2 : Ô²2Ô²ĞÄ£¬r2 Ô²2°ë¾¶
-// ·µ»ØÖµ£º0 £ºÄÚº¬ 1£ºÄÚÇĞ 2£ºÏà½» 3£ºÍâÇĞ 4£ºÍâÀë
-//
-int circleToCircle(const Point& c1, double r1, const Point& c2, double r2)
+// 5.4ã€ä¸¤åœ†ä¹‹é—´çš„å…³ç³»
+// 0ï¼šå†…å«ï¼Œ 1ï¼šå†…åˆ‡ï¼Œ 2ï¼šç›¸äº¤ï¼Œ 3ï¼šå¤–åˆ‡ï¼Œ 4ï¼šå¤–ç¦»
+int circleToCircle(const Point &c1, double r1, const Point &c2, double r2)
 {
 	double ctoc_d = distance(c1, c2);
-
-	if (ctoc_d < abs(r1 - r2))
+	double min_r = abs(r1 - r2);
+	if (ctoc_d < min_r)
 		return 0;
-	else if (ctoc_d == abs(r1 - r2))
+	if (ctoc_d == min_r)
 		return 1;
-	else if (ctoc_d > abs(r1 - r2) && ctoc_d < (r1 + r2))
+
+	double max_r = r1 + r2;
+	if (ctoc_d < max_r)
 		return 2;
-	else if (ctoc_d == (r1 + r2))
+	if (ctoc_d == max_r)
 		return 3;
-	else if (ctoc_d >(r1 + r2))
-		return 4;
+	// if (ctoc_d > max_r)
+	return 4;
 }
